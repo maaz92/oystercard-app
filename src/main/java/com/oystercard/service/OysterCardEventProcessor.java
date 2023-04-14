@@ -1,14 +1,13 @@
-package com.citystoragesystems.service;
+package com.oystercard.service;
 
-import com.citystoragesystems.entity.OysterCardEvent;
+import com.oystercard.entity.OysterCardEvent;
+import com.oystercard.entity.OysterCardEventType;
 
 import java.util.Scanner;
 
 public interface OysterCardEventProcessor {
-    void process(OysterCardEvent oysterCardEvent);
-    boolean matches(String eventType);
+    boolean matches(OysterCardEventType oysterCardEventType);
 
     void run(Scanner scanner);
-    boolean validate(OysterCardEvent oysterCardEvent);
     void printOysterCardEventType();
 }

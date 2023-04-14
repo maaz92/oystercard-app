@@ -1,6 +1,6 @@
-package com.citystoragesystems.repository;
+package com.oystercard.repository;
 
-import com.citystoragesystems.entity.OysterCard;
+import com.oystercard.entity.OysterCard;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -16,12 +16,9 @@ public class OysterCardRepository {
 
     public OysterCard create() {
         OysterCard oysterCard = new OysterCard();
-        long generatedId = new Random().nextLong();
-        if(oysterCards.containsKey(generatedId)) {
-            return create();
-        }
+        long generatedId = 1+oysterCards.size();
         oysterCard.setId(generatedId);
-        this.oysterCards.put(generatedId, oysterCard);
+        oysterCards.put(generatedId, oysterCard);
         return oysterCard.copy();
     }
 
@@ -39,6 +36,27 @@ public class OysterCardRepository {
             throw new RuntimeException("Card with id " + id +" not found");
         }
         oysterCard.setBalance(oysterCard.getBalance()+amount);
+        return oysterCard.copy();
+    }
+
+    public OysterCard reserveBalance(long id, double amount) {
+        OysterCard oysterCard = oysterCards.get(id);
+        if(oysterCard == null) {
+            throw new RuntimeException("Card with id " + id +" not found");
+        }
+        oysterCard.setBalance(oysterCard.getBalance()-amount);
+        oysterCard.setReservedBalance(amount);
+        return oysterCard.copy();
+    }
+
+    public OysterCard deductFare(long id, double fare) {
+        OysterCard oysterCard = oysterCards.get(id);
+        if(oysterCard == null) {
+            throw new RuntimeException("Card with id " + id +" not found");
+        }
+        double remaining = oysterCard.getReservedBalance() - fare;
+        oysterCard.setBalance(oysterCard.getBalance()+remaining);
+        oysterCard.setReservedBalance(0D);
         return oysterCard.copy();
     }
 }

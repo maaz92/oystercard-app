@@ -1,6 +1,6 @@
-package com.citystoragesystems;
+package com.oystercard;
 
-import com.citystoragesystems.service.OysterCardSystem;
+import com.oystercard.service.OysterCardSystem;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

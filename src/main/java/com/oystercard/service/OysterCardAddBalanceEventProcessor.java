@@ -1,9 +1,10 @@
-package com.citystoragesystems.service;
+package com.oystercard.service;
 
-import com.citystoragesystems.entity.OysterCard;
-import com.citystoragesystems.entity.OysterCardEvent;
-import com.citystoragesystems.entity.OysterCardEventType;
-import com.citystoragesystems.repository.OysterCardRepository;
+import com.oystercard.entity.OysterCard;
+import com.oystercard.entity.OysterCardEvent;
+import com.oystercard.entity.OysterCardEventType;
+import com.oystercard.repository.CardEventRepository;
+import com.oystercard.repository.OysterCardRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
@@ -15,18 +16,22 @@ public class OysterCardAddBalanceEventProcessor implements OysterCardEventProces
 
     private OysterCardRepository oysterCardRepository;
 
-    public OysterCardAddBalanceEventProcessor(OysterCardRepository oysterCardRepository) {
+    private CardEventRepository cardEventRepository;
+
+    public OysterCardAddBalanceEventProcessor(OysterCardRepository oysterCardRepository, CardEventRepository cardEventRepository) {
         this.oysterCardRepository = oysterCardRepository;
+        this.cardEventRepository = cardEventRepository;
     }
 
     @Override
+    public boolean matches(OysterCardEventType oysterCardEventType) {
+        return OYSTER_CARD_EVENT_TYPE == oysterCardEventType;
+    }
+
     public void process(OysterCardEvent oysterCardEvent) {
-
-    }
-
-    @Override
-    public boolean matches(String oysterCardEventType) {
-        return OYSTER_CARD_EVENT_TYPE.name().equals(oysterCardEventType);
+        OysterCard oysterCard = this.oysterCardRepository.addBalance(oysterCardEvent.getCardId(), oysterCardEvent.getAmount());
+        this.cardEventRepository.create(oysterCardEvent);
+        System.out.println(oysterCard.toString());
     }
 
     @Override
@@ -41,13 +46,11 @@ public class OysterCardAddBalanceEventProcessor implements OysterCardEventProces
         System.out.println("Input the amount to be added to the card");
         input = scanner.nextLine();
         Double amount = Double.parseDouble(input);
-        OysterCard oysterCard = this.oysterCardRepository.addBalance(cardId, amount);
-        System.out.println(oysterCard.toString());
-    }
-
-    @Override
-    public boolean validate(OysterCardEvent oysterCardEvent) {
-        return false;
+        OysterCardEvent oysterCardEvent = new OysterCardEvent();
+        oysterCardEvent.setCardEventType(OYSTER_CARD_EVENT_TYPE);
+        oysterCardEvent.setCardId(cardId);
+        oysterCardEvent.setAmount(amount);
+        process(oysterCardEvent);
     }
 
     @Override

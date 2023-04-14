@@ -1,4 +1,4 @@
-package com.citystoragesystems.entity;
+package com.oystercard.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class Station {
 
     private Type type;
 
-    private List<Long> zones;
+    private List<Zone> zones;
 
     public long getId() {
         return id;
@@ -33,11 +33,11 @@ public class Station {
         this.name = name;
     }
 
-    public List<Long> getZones() {
+    public List<Zone> getZones() {
         return zones;
     }
 
-    public void setZones(List<Long> zones) {
+    public void setZones(List<Zone> zones) {
         this.zones = zones;
     }
 
@@ -53,8 +53,9 @@ public class Station {
         Station station = new Station();
         station.setId(this.getId());
         station.setName(this.getName());
-        List<Long> stationsZones = new ArrayList<>(zones);
+        List<Zone> stationsZones = new ArrayList<>(zones);
         station.setZones(stationsZones);
+        station.setType(this.getType());
         return station;
     }
 }

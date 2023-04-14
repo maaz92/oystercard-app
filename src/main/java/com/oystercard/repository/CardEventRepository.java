@@ -1,13 +1,15 @@
-package com.citystoragesystems.repository;
+package com.oystercard.repository;
 
-import com.citystoragesystems.entity.OysterCardEvent;
-import com.citystoragesystems.entity.OysterCardEventType;
+import com.oystercard.entity.OysterCardEvent;
+import com.oystercard.entity.OysterCardEventType;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class CardEventRepository {
 
-    private Map<Long, Stack<OysterCardEvent>> oysterCardTapInTapOutEvents;
+    private Map<Long, List<OysterCardEvent>> oysterCardTapInTapOutEvents;
 
     private List<OysterCardEvent> oysterCardOtherEvents;
 
@@ -21,7 +23,7 @@ public class CardEventRepository {
             this.oysterCardOtherEvents.add(oysterCardEvent.copy());
             return oysterCardEvent;
         }
-        Stack<OysterCardEvent> oysterCardEventList = this.oysterCardTapInTapOutEvents.getOrDefault(oysterCardEvent.getCardId(), new Stack<>());
+        List<OysterCardEvent> oysterCardEventList = this.oysterCardTapInTapOutEvents.getOrDefault(oysterCardEvent.getCardId(), new ArrayList<>());
         oysterCardEventList.add(oysterCardEvent.copy());
         oysterCardTapInTapOutEvents.put(oysterCardEvent.getCardId(), oysterCardEventList);
         return oysterCardEvent;
@@ -31,7 +33,8 @@ public class CardEventRepository {
         if(oysterCardTapInTapOutEvents.get(cardId) == null || oysterCardTapInTapOutEvents.get(cardId).isEmpty()) {
             return Optional.ofNullable(null);
         }
-        OysterCardEvent oysterCardEvent = oysterCardTapInTapOutEvents.get(cardId).peek();
+        List<OysterCardEvent> oysterCardEvents = oysterCardTapInTapOutEvents.get(cardId);
+        OysterCardEvent oysterCardEvent = oysterCardEvents.get(oysterCardEvents.size()-1);
         return Optional.ofNullable(oysterCardEvent.copy());
     }
 

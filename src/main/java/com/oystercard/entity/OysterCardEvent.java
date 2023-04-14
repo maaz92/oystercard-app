@@ -1,4 +1,4 @@
-package com.citystoragesystems.entity;
+package com.oystercard.entity;
 
 import java.io.Serializable;
 

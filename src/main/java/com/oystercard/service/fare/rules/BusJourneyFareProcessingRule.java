@@ -1,6 +1,6 @@
-package com.citystoragesystems.service.fare.rules;
+package com.oystercard.service.fare.rules;
 
-import com.citystoragesystems.entity.Station;
+import com.oystercard.entity.Station;
 import org.springframework.stereotype.Component;
 
 @Component

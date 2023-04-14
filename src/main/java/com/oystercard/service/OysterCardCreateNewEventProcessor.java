@@ -1,9 +1,10 @@
-package com.citystoragesystems.service;
+package com.oystercard.service;
 
-import com.citystoragesystems.entity.OysterCard;
-import com.citystoragesystems.entity.OysterCardEvent;
-import com.citystoragesystems.entity.OysterCardEventType;
-import com.citystoragesystems.repository.OysterCardRepository;
+import com.oystercard.entity.OysterCard;
+import com.oystercard.entity.OysterCardEvent;
+import com.oystercard.entity.OysterCardEventType;
+import com.oystercard.repository.CardEventRepository;
+import com.oystercard.repository.OysterCardRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
@@ -15,29 +16,30 @@ public class OysterCardCreateNewEventProcessor implements OysterCardEventProcess
 
     private OysterCardRepository oysterCardRepository;
 
-    public OysterCardCreateNewEventProcessor(OysterCardRepository oysterCardRepository) {
+    private CardEventRepository cardEventRepository;
+
+    public OysterCardCreateNewEventProcessor(OysterCardRepository oysterCardRepository, CardEventRepository cardEventRepository) {
         this.oysterCardRepository = oysterCardRepository;
+        this.cardEventRepository = cardEventRepository;
     }
 
     @Override
-    public void process(OysterCardEvent oysterCardEvent) {
-
+    public boolean matches(OysterCardEventType oysterCardEventType) {
+        return OYSTER_CARD_EVENT_TYPE == oysterCardEventType;
     }
 
-    @Override
-    public boolean matches(String oysterCardEventType) {
-        return OYSTER_CARD_EVENT_TYPE.name().equals(oysterCardEventType);
+    public OysterCard process(OysterCardEvent oysterCardEvent) {
+        OysterCard oysterCard = oysterCardRepository.create();
+        oysterCardEvent.setCardId(oysterCard.getId());
+        this.cardEventRepository.create(oysterCardEvent);
+        System.out.println(oysterCard.toString());
+        return oysterCard;
     }
-
     @Override
     public void run(Scanner scanner) {
-        OysterCard oysterCard = oysterCardRepository.create();
-        System.out.println(oysterCard.toString());
-    }
-
-    @Override
-    public boolean validate(OysterCardEvent oysterCardEvent) {
-        return false;
+        OysterCardEvent oysterCardEvent = new OysterCardEvent();
+        oysterCardEvent.setCardEventType(OYSTER_CARD_EVENT_TYPE);
+        process(oysterCardEvent);
     }
 
     @Override

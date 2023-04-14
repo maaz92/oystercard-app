@@ -1,7 +1,7 @@
-package com.citystoragesystems.service.fare.rules;
+package com.oystercard.service.fare.rules;
 
-import com.citystoragesystems.entity.Station;
-import com.citystoragesystems.entity.ZoneType;
+import com.oystercard.entity.Station;
+import com.oystercard.entity.Zone;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,7 +11,7 @@ public class MoreThanTwoZonesFareProcessingRule implements FareProcessingRule{
 
     @Override
     public boolean doesApply(Station sourceStation, Station destinationStation) {
-        return !sourceStation.getZones().contains(ZoneType.ZONE_2.getId()) && !destinationStation.getZones().contains(ZoneType.ZONE_2.getId());
+        return !sourceStation.getZones().contains(Zone.ZONE_2) && !destinationStation.getZones().contains(Zone.ZONE_2);
     }
 
     @Override

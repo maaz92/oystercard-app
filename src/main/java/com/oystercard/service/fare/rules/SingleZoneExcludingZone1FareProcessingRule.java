@@ -1,10 +1,9 @@
-package com.citystoragesystems.service.fare.rules;
+package com.oystercard.service.fare.rules;
 
-import com.citystoragesystems.entity.Station;
-import com.citystoragesystems.entity.ZoneType;
+import com.oystercard.entity.Station;
+import com.oystercard.entity.Zone;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,9 +15,9 @@ public class SingleZoneExcludingZone1FareProcessingRule implements FareProcessin
     @Override
     public boolean doesApply(Station sourceStation, Station destinationStation) {
 
-        Set<Long> sourceStationZones =  new HashSet<>(sourceStation.getZones());
-        for(long destinationZoneId: destinationStation.getZones()) {
-            if(destinationZoneId != ZoneType.ZONE_1.getId() && sourceStationZones.contains(destinationZoneId)) {
+        Set<Zone> sourceStationZones =  new HashSet<>(sourceStation.getZones());
+        for(Zone destinationZone: destinationStation.getZones()) {
+            if(destinationZone != Zone.ZONE_1 && sourceStationZones.contains(destinationZone)) {
                 return true;
             }
         }

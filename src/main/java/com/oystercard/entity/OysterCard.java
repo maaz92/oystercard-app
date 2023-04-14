@@ -1,4 +1,4 @@
-package com.citystoragesystems.entity;
+package com.oystercard.entity;
 
 public class OysterCard {
 

@@ -1,9 +1,10 @@
-package com.citystoragesystems.service.fare;
+package com.oystercard.service.fare;
 
-import com.citystoragesystems.entity.OysterCard;
-import com.citystoragesystems.entity.Station;
+import com.oystercard.entity.Station;
 
 public interface FareProcessingStratergy {
 
     double calculateFare(Station sourceStation, Station destinationStation);
+
+    double calculateFareReserveAmount(Station sourceStation);
 }
